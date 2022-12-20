@@ -3,11 +3,17 @@ const dqs = (id) => document.querySelector(id);
 const getItem = (keyName) => {
   let item;
   const storedItem = localStorage.getItem(keyName);
+  console.log(storedItem, " => Line No: 6");
   if (storedItem) {
     item = JSON.parse(storedItem);
   } else {
-    const toDoItem = [];
-    item = { toDoItem };
+    if (keyName === "toDoItem") {
+      const toDoItem = [];
+      item = { toDoItem };
+    } else if (keyName === "doneItem") {
+      const doneItem = [];
+      item = { doneItem };
+    }
   }
   return item;
 };
@@ -16,11 +22,29 @@ const saveItem = (item, keyName) => {
   localStorage.setItem(keyName, JSON.stringify(item));
 };
 
-const removeItem = (x) => {
-  const storedItem = getItem("toDoItem");
-  const newItem = storedItem?.toDoItem?.filter((item) => item !== x);
-  storedItem.toDoItem = newItem;
-  saveItem(storedItem, "toDoItem");
+const removeItem = (value, divName) => {
+  const storedItem = getItem(divName);
+  console.log(value, divName, storedItem, " => Line No: **");
+  let newItem;
+  if (divName === "toDoItem") {
+    newItem = storedItem?.toDoItem?.filter((item) => item !== value);
+    storedItem[divName] = newItem;
+    saveItem(storedItem, divName);
+    showItem();
+  } else if (divName === "doneItem") {
+    newItem = storedItem?.doneItem?.filter((item) => item !== value);
+    storedItem[divName] = newItem;
+    saveItem(storedItem, divName);
+    showItem();
+    console.log(divName, " => Line No: 37");
+  }
+};
+const doneItem = (value) => {
+  console.log("done", value, " => Line No: 43");
+  removeItem(value, "toDoItem");
+  const storedItem = getItem("doneItem");
+  storedItem?.doneItem?.indexOf(value) === -1 && storedItem?.doneItem?.push(value);
+  saveItem(storedItem, "doneItem");
   showItem();
 };
 
@@ -28,21 +52,18 @@ dqs("#search-btn").addEventListener("click", () => {
   const value = dqs("#search").value;
   if (value) {
     const storedItem = getItem("toDoItem");
-    storedItem?.toDoItem.indexOf(value) === -1 && storedItem?.toDoItem?.push(value);
+    console.log(storedItem, " => Line No: 54");
+    storedItem?.toDoItem?.indexOf(value) === -1 && storedItem?.toDoItem?.push(value);
     saveItem(storedItem, "toDoItem");
   }
   showItem();
 });
-
-const showItem = () => {
-  dqs("#showItem").innerHTML = "";
-  const item = getItem("toDoItem");
-  item.toDoItem.length > 0 &&
-    item.toDoItem.map((x) => {
-      let div = document.createElement("div");
-      div.classList.add("container");
-      div.classList.add("my-1");
-      div.innerHTML = `
+const showSingle = (item, divName) => {
+  // const divNameStr = divName.split("#")[1];
+  let div = document.createElement("div");
+  div.classList.add("container");
+  div.classList.add("my-1");
+  div.innerHTML = `
                     <div class="relative">
             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -55,16 +76,32 @@ const showItem = () => {
               </svg>
             </div>
 
-            <input type="search" readonly class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="${x}" required />
-            <button onclick = "removeItem('${x}')" id="itemDelete" type="submit" class="text-white absolute right-20 bottom-2.5 bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-blue-800">Delete</button>
-            <button type="submit" class="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Done</button>
+            <input type="search" readonly class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="${item}" required />
+            <button onclick = "removeItem('${item}')" id="itemDelete" type="submit" class="text-white absolute right-20 bottom-2.5 bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-blue-800">Delete</button>
+            <button onclick = "doneItem('${item}')" type="submit" class="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Done</button>
           </div>`;
-      dqs("#showItem").appendChild(div);
-    });
+  dqs(divName).appendChild(div);
 };
 
 dqs("#itemDelete")?.addEventListener("click", () => {
   console.log("id", " => Line No: 20");
 });
+const showItem = () => {
+  dqs("#toDoItem").innerHTML = "";
+  dqs("#doneItem").innerHTML = "";
+  const getToDoItem = getItem("toDoItem");
+  const getDoneItem = getItem("doneItem");
+  console.log(getToDoItem, getDoneItem, " => Line No: 94");
+  if (getToDoItem?.toDoItem?.length > 0) {
+    getToDoItem?.toDoItem?.map((item) => {
+      showSingle(item, "#toDoItem");
+    });
+  }
+  if (getDoneItem?.doneItem?.length > 0) {
+    getDoneItem?.doneItem?.map((item) => {
+      showSingle(item, "#doneItem");
+    });
+  }
+};
 
 showItem();
