@@ -16,6 +16,14 @@ const saveItem = (item, keyName) => {
   localStorage.setItem(keyName, JSON.stringify(item));
 };
 
+const removeItem = (x) => {
+  const storedItem = getItem("toDoItem");
+  const newItem = storedItem?.toDoItem?.filter((item) => item !== x);
+  storedItem.toDoItem = newItem;
+  saveItem(storedItem, "toDoItem");
+  showItem();
+};
+
 dqs("#search-btn").addEventListener("click", () => {
   const value = dqs("#search").value;
   if (value) {
@@ -29,11 +37,12 @@ dqs("#search-btn").addEventListener("click", () => {
 const showItem = () => {
   dqs("#showItem").innerHTML = "";
   const item = getItem("toDoItem");
-  item.toDoItem.map((x) => {
-    let div = document.createElement("div");
-    div.classList.add("container");
-    div.classList.add("my-1");
-    div.innerHTML = `
+  item.toDoItem.length > 0 &&
+    item.toDoItem.map((x) => {
+      let div = document.createElement("div");
+      div.classList.add("container");
+      div.classList.add("my-1");
+      div.innerHTML = `
                     <div class="relative">
             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -47,10 +56,15 @@ const showItem = () => {
             </div>
 
             <input type="search" readonly class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="${x}" required />
-            <button type="submit" class="text-white absolute right-20 bottom-2.5 bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-blue-800">Delete</button>
+            <button onclick = "removeItem('${x}')" id="itemDelete" type="submit" class="text-white absolute right-20 bottom-2.5 bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-blue-800">Delete</button>
             <button type="submit" class="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Done</button>
           </div>`;
-    dqs("#showItem").appendChild(div);
-  });
+      dqs("#showItem").appendChild(div);
+    });
 };
+
+dqs("#itemDelete")?.addEventListener("click", () => {
+  console.log("id", " => Line No: 20");
+});
+
 showItem();
