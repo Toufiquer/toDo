@@ -115,6 +115,8 @@ const showItem = () => {
   dqs("#doneItem").innerHTML = "";
   const getToDoItem = getItem("toDoItem");
   const getDoneItem = getItem("doneItem");
+  dqs("#doneLength").innerText = getDoneItem?.doneItem?.length || 0;
+  dqs("#toDoLength").innerText = getToDoItem?.toDoItem?.length || 0;
   if (getToDoItem?.toDoItem?.length > 0) {
     getToDoItem?.toDoItem?.map((item) => {
       showSingle(item, "#toDoItem");
@@ -154,5 +156,12 @@ const showItem = () => {
   div.innerHTML = `<div  class="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full" style="width: ${percentData}%">${percentData}%</div>`;
   dqs("#percent-width").appendChild(div);
 };
-
+const clearDoneItem = () => {
+  localStorage.removeItem("doneItem");
+  showItem();
+};
+const clearToDoItem = () => {
+  localStorage.removeItem("toDoItem");
+  showItem();
+};
 showItem();

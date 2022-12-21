@@ -11,9 +11,7 @@
     <!-- Progress Bar -->
     <div class="my-4 py-4">
       <div class="container mx-auto">
-        <div id="percent-width" class="w-full bg-gray-200 rounded-full dark:bg-gray-700">
-          
-        </div>
+        <div id="percent-width" class="w-full bg-gray-200 rounded-full dark:bg-gray-700"></div>
       </div>
     </div>
     <!-- Progress Bar -->
@@ -33,7 +31,17 @@
     </div>
     <!-- Add New Item -->
     <div class="container mx-auto">
-      <div class="grid grid-cols-2 my-2">
+      <div class="grid grid-cols-1">
+        <div class="flex items-center mx-auto mt-2">
+          <button onclick="clearToDoItem()" type="submit" class="mx-2 text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-blue-800">Clear All To Do Item</button
+          ><button onclick="clearDoneItem()" type="submit" class="mx-2 text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-blue-800">Clear All Done Item</button>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 mt-2">
+        <div class="bg-blue-400 p-4 text-white text-center font-bold">To Do Item || <span id="toDoLength"></span></div>
+        <div class="bg-blue-500 p-4 text-white text-center font-bold">Done || <span id="doneLength"></span></div>
+      </div>
+      <div class="grid grid-cols-2 mb-2">
         <div id="toDoItem" class="bg-blue-300 min-h-screen p-4"></div>
         <div id="doneItem" class="bg-blue-400 min-h-screen p-4"></div>
       </div>
