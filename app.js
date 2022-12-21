@@ -140,8 +140,19 @@ const showItem = () => {
     completeData.push(item);
   });
   let completePercent = (completeData.length * 100) / totalData.length;
-  console.log(completeData.length, totalData.length, " => Line No: 143");
-  console.log(totalData, completeData, completePercent, " => Line No: 133");
+  console.log(Math.round(completePercent), " => Line No: 143");
+  let percentData;
+  if (isNaN(Math.round(completePercent))) {
+    percentData = 0;
+    console.log("NaN", " => Line No: 146");
+  } else {
+    percentData = Math.round(completePercent);
+    console.log("not NaN", " => Line No: 149");
+  }
+  dqs("#percent-width").innerHTML = "";
+  const div = document.createElement("div");
+  div.innerHTML = `<div  class="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full" style="width: ${percentData}%">${percentData}%</div>`;
+  dqs("#percent-width").appendChild(div);
 };
 
 showItem();
