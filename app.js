@@ -23,7 +23,6 @@ const saveItem = (item, keyName) => {
 
 const removeItem = (value, divName) => {
   const storedItem = getItem(divName);
-  console.log(value, divName, storedItem, " => Line No: **");
   let newItem;
   if (divName === "toDoItem") {
     newItem = storedItem?.toDoItem?.filter((item) => item !== value);
@@ -35,11 +34,9 @@ const removeItem = (value, divName) => {
     storedItem[divName] = newItem;
     saveItem(storedItem, divName);
     showItem();
-    console.log(divName, " => Line No: 37");
   }
 };
 const doneItem = (value) => {
-  console.log("done", value, " => Line No: 43");
   removeItem(value, "toDoItem");
   const storedItem = getItem("doneItem");
   storedItem?.doneItem?.indexOf(value) === -1 && storedItem?.doneItem?.push(value);
@@ -51,14 +48,13 @@ dqs("#search-btn").addEventListener("click", () => {
   const value = dqs("#search").value;
   if (value) {
     const storedItem = getItem("toDoItem");
-    // console.log(storedItem, " => Line No: 54");
     storedItem?.toDoItem?.indexOf(value) === -1 && storedItem?.toDoItem?.push(value);
     saveItem(storedItem, "toDoItem");
+    dqs("#search").value = "";
   }
   showItem();
 });
 const showSingle = (item, divName) => {
-  // const divNameStr = divName.split("#")[1];
   let div = document.createElement("div");
   div.classList.add("container");
   div.classList.add("my-1");
@@ -106,8 +102,6 @@ const deleteItem = (item) => {
     }
   }
   showItem();
-  console.log("ok", " => Line No: 106");
-  // console.log(getToDoItem, item, getDoneItem, " => Line No: 89");
 };
 
 const showItem = () => {
@@ -127,7 +121,7 @@ const showItem = () => {
       showSingle(item, "#doneItem");
     });
   }
-  // Update
+  // Update percent Data.
   let totalData = [];
   let completeData = [];
   const doneItem = getItem("doneItem");
@@ -142,14 +136,11 @@ const showItem = () => {
     completeData.push(item);
   });
   let completePercent = (completeData.length * 100) / totalData.length;
-  console.log(Math.round(completePercent), " => Line No: 143");
   let percentData;
   if (isNaN(Math.round(completePercent))) {
     percentData = 0;
-    console.log("NaN", " => Line No: 146");
   } else {
     percentData = Math.round(completePercent);
-    console.log("not NaN", " => Line No: 149");
   }
   dqs("#percent-width").innerHTML = "";
   const div = document.createElement("div");
