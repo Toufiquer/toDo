@@ -3,7 +3,6 @@ const dqs = (id) => document.querySelector(id);
 const getItem = (keyName) => {
   let item;
   const storedItem = localStorage.getItem(keyName);
-  console.log(storedItem, " => Line No: 6");
   if (storedItem) {
     item = JSON.parse(storedItem);
   } else {
@@ -77,21 +76,34 @@ const showSingle = (item, divName) => {
             </div>
 
             <input type="search" readonly class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="${item}" required />
-            <button onclick = "removeItem('${item}')" id="itemDelete" type="submit" class="text-white absolute right-20 bottom-2.5 bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-blue-800">Delete</button>
+            <button onclick = "deleteItem('${item}')" id="itemDelete" type="submit" class="text-white absolute right-20 bottom-2.5 bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-blue-800">Delete</button>
             <button onclick = "doneItem('${item}')" type="submit" class="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Done</button>
           </div>`;
   dqs(divName).appendChild(div);
 };
 
-dqs("#itemDelete")?.addEventListener("click", () => {
-  console.log("id", " => Line No: 20");
-});
+const deleteItem = (item) => {
+  let getToDoItem = getItem("toDoItem");
+  const getDoneItem = getItem("doneItem");
+  if (getToDoItem?.toDoItem?.indexOf(item) >= 0) {
+    const newToDoItem = getToDoItem?.toDoItem?.filter((single) => single !== item);
+    console.log(getToDoItem?.toDoItem, " => Line No: 90");
+    // getToDoItem?.toDoItem = newToDoItem;
+    // saveItem(getToDoItem,"toDoItem");
+  }
+  if (getDoneItem?.doneItem?.indexOf(item) >= 0) {
+    const newDoneItem = getDoneItem?.doneItem?.filter((single) => single !== item);
+    // getDoneItem?.doneItem=[...newDoneItem];
+    // saveItem(getDoneItem,"toDoItem");
+  }
+  // console.log(getToDoItem, item, getDoneItem, " => Line No: 89");
+};
+
 const showItem = () => {
   dqs("#toDoItem").innerHTML = "";
   dqs("#doneItem").innerHTML = "";
   const getToDoItem = getItem("toDoItem");
   const getDoneItem = getItem("doneItem");
-  console.log(getToDoItem, getDoneItem, " => Line No: 94");
   if (getToDoItem?.toDoItem?.length > 0) {
     getToDoItem?.toDoItem?.map((item) => {
       showSingle(item, "#toDoItem");
