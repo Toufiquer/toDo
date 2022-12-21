@@ -125,6 +125,23 @@ const showItem = () => {
       showSingle(item, "#doneItem");
     });
   }
+  // Update
+  let totalData = [];
+  let completeData = [];
+  const doneItem = getItem("doneItem");
+  const toDoItem = getItem("toDoItem");
+  doneItem.doneItem.map((item) => {
+    totalData.push(item);
+  });
+  toDoItem.toDoItem.map((item) => {
+    totalData.push(item);
+  });
+  doneItem.doneItem.map((item) => {
+    completeData.push(item);
+  });
+  let completePercent = (completeData.length * 100) / totalData.length;
+  console.log(completeData.length, totalData.length, " => Line No: 143");
+  console.log(totalData, completeData, completePercent, " => Line No: 133");
 };
 
 showItem();
