@@ -51,7 +51,7 @@ dqs("#search-btn").addEventListener("click", () => {
   const value = dqs("#search").value;
   if (value) {
     const storedItem = getItem("toDoItem");
-    console.log(storedItem, " => Line No: 54");
+    // console.log(storedItem, " => Line No: 54");
     storedItem?.toDoItem?.indexOf(value) === -1 && storedItem?.toDoItem?.push(value);
     saveItem(storedItem, "toDoItem");
   }
@@ -87,15 +87,26 @@ const deleteItem = (item) => {
   const getDoneItem = getItem("doneItem");
   if (getToDoItem?.toDoItem?.indexOf(item) >= 0) {
     const newToDoItem = getToDoItem?.toDoItem?.filter((single) => single !== item);
-    console.log(getToDoItem?.toDoItem, " => Line No: 90");
-    // getToDoItem?.toDoItem = newToDoItem;
-    // saveItem(getToDoItem,"toDoItem");
+    if (newToDoItem.length === 0) {
+      localStorage.removeItem("toDoItem");
+    } else {
+      const storedItem = getItem("toDoItem");
+      storedItem.toDoItem = newToDoItem;
+      saveItem(storedItem, "toDoItem");
+    }
   }
   if (getDoneItem?.doneItem?.indexOf(item) >= 0) {
     const newDoneItem = getDoneItem?.doneItem?.filter((single) => single !== item);
-    // getDoneItem?.doneItem=[...newDoneItem];
-    // saveItem(getDoneItem,"toDoItem");
+    if (newDoneItem.length === 0) {
+      localStorage.removeItem("doneItem");
+    } else {
+      const storedItem = getItem("doneItem");
+      storedItem.doneItem = newDoneItem;
+      saveItem(storedItem, "doneItem");
+    }
   }
+  showItem();
+  console.log("ok", " => Line No: 106");
   // console.log(getToDoItem, item, getDoneItem, " => Line No: 89");
 };
 
